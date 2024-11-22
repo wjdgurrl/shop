@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class BasicController {
     @GetMapping("/")
-    //ResponseBody <-- 있으면 문자 그대로 보내주세요, 아니면 파일을 보내줌
+    //ResponseBody <-- 있으면 문자 그대로 보내주세요, 없으면 파일을 보내줌
     String hello(){
         return "index.html";
     }
