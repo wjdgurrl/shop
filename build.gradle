@@ -31,8 +31,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //orm라이브러리 -> 자바코드로 입출력 가능
 
     //롬복 라이브러리리
-   compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    //스프링 시큐리티(회원가입)라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 
 }
 
