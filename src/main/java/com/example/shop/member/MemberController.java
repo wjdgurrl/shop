@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/register")
     public String register(){
@@ -25,7 +24,11 @@ public class MemberController {
     @PostMapping("/member")
     public String addMember(@RequestParam String username, String password,String displayName) throws Exception {
         memberService.addMember(username, password, displayName);
-
         return "redirect:/list";
+    }
+    //todo 수정필요
+    @GetMapping("/login")
+    public String login(){
+        return "login.html";
     }
 }

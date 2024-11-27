@@ -28,6 +28,11 @@ public class SecurityConfig {
                 //특정 페이지 로그인 할지 결정가능
                 authorize.requestMatchers("/**").permitAll()
         );
+        //앞으로 폼으로 로그인 하겠다는 의미
+        http.formLogin((formLogin) -> formLogin.loginPage("/login")
+                .defaultSuccessUrl("/") //성공시 이동할 페이지
+                //.failureUrl("/fail") //실패시 이동할 페이지 실패시 기본적으로 /login?error로 이동
+        );
         return http.build();
     }
 }

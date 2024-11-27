@@ -14,11 +14,11 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public void addMember(String username, String password,String displayName)throws Exception{
-        Optional<Member> result = memberRepository.findById(Long.valueOf(username));
+        var result = memberRepository.findByUsername(username);
         if(result.isPresent()){
             throw new Exception("중복된 아이디");
         }
-        if(username.length() < 4 || password.length() <4){
+        if(username.length() < 4 || password.length() < 4){
             throw new Exception("too short");
         }
         Member member = new Member();
@@ -26,6 +26,6 @@ public class MemberService {
         var hashPassword = passwordEncoder.encode(password);
         member.setPassword(hashPassword);
         member.setDisplayName(displayName);
-        this.memberRepository.save(member);
+        memberRepository.save(member);
     }
 }
