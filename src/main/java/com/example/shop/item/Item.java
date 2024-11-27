@@ -1,4 +1,4 @@
-package com.example.shop.Item;
+package com.example.shop.item;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +18,7 @@ public class Item {
     @Column(length = 200) //@Column() 컬럼위에 붙이면 제약사항을 입력할 수 있는데, 200자 제한
     private String title;
     public Integer price; //컬럼용 변수에는 원시형 추천
+    private String writer;
 
     /*@Override
     public String toString() {

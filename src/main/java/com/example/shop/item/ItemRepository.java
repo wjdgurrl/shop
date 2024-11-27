@@ -1,4 +1,4 @@
-package com.example.shop.Item;
+package com.example.shop.item;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

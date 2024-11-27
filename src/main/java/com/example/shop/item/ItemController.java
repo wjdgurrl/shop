@@ -1,7 +1,8 @@
-package com.example.shop.Item;
+package com.example.shop.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +42,8 @@ public class ItemController {
 
     @PostMapping("/add")
     //기존 <input>데이터들을 바로 object로 변환하려면 @ModelAttribute
-    String addPost(String title, Integer price) {
-        itemService.saveItem(title, price);
+    String addPost(String title, Integer price, Authentication auth) {
+        itemService.saveItem(title, price, auth.getName());
         return "redirect:/list";
     }
 

@@ -1,4 +1,4 @@
-package com.example.shop.Item;
+package com.example.shop.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    public void saveItem(String title, Integer price){
+    public void saveItem(String title, Integer price, String name){
         Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
