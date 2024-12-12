@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+
     @Bean
     //외부 라이브러리를 dependency injection식으로 쓸때 bean형태로 등록
     PasswordEncoder passwordEncoder(){
@@ -21,6 +22,7 @@ public class SecurityConfig {
     @Bean
     //filterChain 어떤 페이지를 로그인 검사할지 설정가능
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         //csrf
         //csrf 차단기능
         http.csrf((csrf) -> csrf.disable());
@@ -36,5 +38,7 @@ public class SecurityConfig {
         //로그아웃 기능
         http.logout(logout -> logout.logoutUrl("/logout"));
         return http.build();
+
     }
+
 }

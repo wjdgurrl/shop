@@ -3,6 +3,8 @@ package com.example.shop.item;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
+
 import java.util.List;
 
 //1.리포지터리 생성

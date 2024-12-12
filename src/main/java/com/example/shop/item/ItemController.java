@@ -42,7 +42,7 @@ public class ItemController {
 
     @PostMapping("/add")
     //기존 <input>데이터들을 바로 object로 변환하려면 @ModelAttribute
-    String addPost(String title, Integer price, Authentication auth) {
+    String addPost(@RequestParam String title, Integer price, Authentication auth) {
         itemService.saveItem(title, price, auth.getName());
         return "redirect:/list";
     }
@@ -74,9 +74,9 @@ public class ItemController {
     }
 
     @PostMapping("/edit")
-    public String updateItem(@RequestParam String title, Integer price, Long id){
+    public String updateItem(@RequestParam String title, Integer price, Long id,Authentication authentication){
         if(title.length() < 100 && price > 0){
-           itemService.updateItem(title,price,id);
+           itemService.updateItem(title,price,id,authentication.getName());
         }
         return "redirect:/list";
     }
