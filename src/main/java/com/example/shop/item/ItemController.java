@@ -1,6 +1,11 @@
 package com.example.shop.item;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +20,7 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ItemService itemService;
+    private Object page;
 
     /*@Autowired
     public ItemController(ItemRepository itemRepository) {
@@ -87,4 +93,21 @@ public class ItemController {
         //AJAX는 리다이렉트가 안됨
         return ResponseEntity.status(200).body("삭제완료");
     }
+
+    //페이지네이션
+    @GetMapping("/list/page/{id}")
+    String getListPage(@PathVariable Integer id, Model model){
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1,5)); // 테이블에서 일부만 가져옴 ,몇번째 페이지 ,몇개
+        result.getTotalPages(); //총 몇페이지가 있는지 알려줌
+        result.hasNext(); //다음 페이지가 있는지 알려줌
+        //model.addAttribute("items", result);
+        model.addAttribute("items", result.getContent()); //현재 페이지의 데이터 만큼 출력
+        model.addAttribute("currentPage", id); // 현재 페이지 번호
+        model.addAttribute("totalPages", result.getTotalPages()); // 총 페이지 수
+        model.addAttribute("hasNext", result.hasNext()); // 다음 페이지 존재 여부
+        model.addAttribute("hasPrevious", result.hasPrevious()); // 이전 페이지 존재 여부
+        return "list.html";
+    }
+
+
 }
