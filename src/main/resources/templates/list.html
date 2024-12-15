@@ -21,6 +21,8 @@
         </div>
     </div>
 
+    <th:block th:utext="'currentPage: ' + ${currentPage} + ', totalPages: ' + ${totalPages}"></th:block>
+
     <div class="pagination">
         <!-- 이전 버튼 -->
         <a th:if="${currentPage > 1}"
@@ -28,6 +30,8 @@
            class="prev-button">이전</a>
 
         <!-- 페이지 번호 버튼 -->
+        <!--내장 함수 numbers.sequence(시작,끝)까지 범위 생성-->
+        <!--그리고 반복-->
         <span th:each="page : ${#numbers.sequence(1, totalPages)}">
             <a th:href="@{/list/page/{page}(page=${page})}"
                th:text="${page}"
@@ -38,6 +42,14 @@
         <a th:if="${currentPage < totalPages}"
            th:href="@{/list/page/{page}(page=${currentPage + 1})}"
            class="next-button">다음</a>
+
+        <!--시작과 끝 설정해주기-->
+        <!--<span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/list/page/{page}(page=${page})}"
+            th:text="${page}"
+            th:classappend="${page == currentPage} ? 'active' : ''"></a>
+        </span>-->
+
     </div>
 
 

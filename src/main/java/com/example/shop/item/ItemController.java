@@ -29,8 +29,9 @@ public class ItemController {
 
     @GetMapping("/list")
     String list(Model model){
-        itemService.listItem(model);
-        return "list.html";
+        //itemService.listItem(model);
+        //기존 리스트 페이지를 페이지네이션 한 링크로 리다이렉트
+        return "redirect:/list/page/1";
     }
 
 
@@ -107,6 +108,16 @@ public class ItemController {
         model.addAttribute("hasNext", result.hasNext()); // 다음 페이지 존재 여부
         model.addAttribute("hasPrevious", result.hasPrevious()); // 이전 페이지 존재 여부
         return "list.html";
+        //시작과 끝 페이시 설정해주기
+        /* int startPage = Math.max(1, currentPage - 2);
+        int endPage = Math.min(totalPages, currentPage + 2);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);*/
+    }
+
+    @PostMapping("/presigned-url")
+    String getURL(@RequestParam String filename) {
+
     }
 
 
