@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/main.css" rel ="stylesheet">
+</head>
+<body>
+    <div th:replace="~{nav.html::navbar}"></div>
+
+    <div class = "card" th:each=" i : ${items}"> <!-- 타임리프 반복 문법 -->
+        <a th:href="@{/detail/{id}(id=${i.id})}">
+        <img th:src="${i.imgUrl}" alt="상품 이미지" style="max-width: 300px;">
+        </a>
+        <img src = "https://placehold.co/300">
+<!--        타임리프 문법 -->
+        <div>
+<!--            <h4 th:text="${i.title}">바지</h4>-->
+            <a th:href="@{/detail/{id}(id=${i.id})}">
+                <h4 th:text="${i.title}">상품</h4>
+            </a>
+            <p th:text="${i.price}">가격</p>
+        </div>
+    </div>
+
+    <th:block th:utext="'currentPage: ' + ${currentPage} + ', totalPages: ' + ${totalPages}"></th:block>
+
+    <div class="pagination">
+        <!-- 이전 버튼 -->
+        <a th:if="${currentPage > 1}"
+           th:href="@{/list/page/{page}(page=${currentPage - 1})}"
+           class="prev-button">이전</a>
+
+        <!-- 페이지 번호 버튼 -->
+        <!--내장 함수 numbers.sequence(시작,끝)까지 범위 생성-->
+        <!--그리고 반복-->
+        <span th:each="page : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{/list/page/{page}(page=${page})}"
+               th:text="${page}"
+               th:classappend="${page == currentPage} ? 'active' : ''"></a>
+        </span>
+
+        <!-- 다음 버튼 -->
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{/list/page/{page}(page=${currentPage + 1})}"
+           class="next-button">다음</a>
+
+        <!--시작과 끝 설정해주기-->
+        <!--<span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/list/page/{page}(page=${page})}"
+            th:text="${page}"
+            th:classappend="${page == currentPage} ? 'active' : ''"></a>
+        </span>-->
+
+    </div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link href="/main.css" rel ="stylesheet">
+</head>
+<body>
+<div th:replace="~{nav.html::navbar}"></div>
+<h4>마이페이지입니다</h4>
+<!--html에 유저정보 출력하기-->
+<h3 sec:authentication="principal"></h3>
+<span sec:authentication="principal.username">></span>
+<span sec:authentication="principal.authorities">></span>
+<!--특정권한 있을 시 출력-->
+<span sec:authorize="hasAuthority('normal')">
+    일반 유저입니다.
+</span>
+<!--로그인시에만 출력-->
+<span sec:authorize="isAuthenticated">
+    로그인 했씁니다.
+</span>
+<!--로그아웃시에만 출력 -->
+<span sec:authorize="isAnonymous()">
+    로그아웃 상태입니다
+</span>
+
+
+</body>
+</html>
