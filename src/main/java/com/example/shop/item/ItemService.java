@@ -18,11 +18,12 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
 
-    public void saveItem(String title, Integer price, String writer){
+    public void saveItem(String title, Integer price, String writer,String filename){
         Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
         item.setWriter(writer);
+        item.setImgUrl(filename);
         itemRepository.save(item);
 
     }

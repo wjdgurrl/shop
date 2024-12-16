@@ -20,7 +20,7 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ItemService itemService;
-    private Object page;
+    private final S3Service s3Service;
 
     /*@Autowired
     public ItemController(ItemRepository itemRepository) {
@@ -49,8 +49,8 @@ public class ItemController {
 
     @PostMapping("/add")
     //기존 <input>데이터들을 바로 object로 변환하려면 @ModelAttribute
-    String addPost(@RequestParam String title, Integer price, Authentication auth) {
-        itemService.saveItem(title, price, auth.getName());
+    String addPost(@RequestParam String title, Integer price, Authentication auth, String picture) {
+        itemService.saveItem(title, price, auth.getName(),picture);
         return "redirect:/list";
     }
 
@@ -102,6 +102,7 @@ public class ItemController {
         result.getTotalPages(); //총 몇페이지가 있는지 알려줌
         result.hasNext(); //다음 페이지가 있는지 알려줌
         //model.addAttribute("items", result);
+
         model.addAttribute("items", result.getContent()); //현재 페이지의 데이터 만큼 출력
         model.addAttribute("currentPage", id); // 현재 페이지 번호
         model.addAttribute("totalPages", result.getTotalPages()); // 총 페이지 수
@@ -115,9 +116,12 @@ public class ItemController {
         model.addAttribute("endPage", endPage);*/
     }
 
-    @PostMapping("/presigned-url")
+    @GetMapping("/presigned-url")
+    @ResponseBody
     String getURL(@RequestParam String filename) {
-
+        var result = s3Service.createPresignedUrl("test/"+filename);
+        System.out.println(result);
+        return result;
     }
 
 

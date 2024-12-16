@@ -20,6 +20,8 @@ public class Item {
     public Integer price; //컬럼용 변수에는 원시형 추천
     private String writer;
 
+    @Column(length = 1000)
+    private String imgUrl;
     /*@Override
     public String toString() {
         return this.title + this.price;

@@ -19,14 +19,14 @@ public class S3Service {
 
     String createPresignedUrl(String path) {
         var putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucket)
-                .key(path)
+                .bucket(bucket) //업로드할 버킷이름
+                .key(path) // 업로드할 경로(파일명)
                 .build();
         var preSignRequest = PutObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(3))
+                .signatureDuration(Duration.ofMinutes(3)) //url 유효기간 (3분)
                 .putObjectRequest(putObjectRequest)
                 .build();
-        return s3Presigner.presignPutObject(preSignRequest).url().toString();
+        return s3Presigner.presignPutObject(preSignRequest).url().toString();//url 발급
     }
 
 }
