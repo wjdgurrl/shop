@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @Entity
 //테이블 생성
-@ToString // 롬복 toString 문법
+@ToString // 롬복  toString() 기능으로 인스턴스에 대한 정보를 문자열로 반환해주는거 주소 안나오고
 @Setter
 @Getter
 public class Item {

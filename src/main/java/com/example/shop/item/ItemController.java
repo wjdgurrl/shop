@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -81,9 +82,9 @@ public class ItemController {
     }
 
     @PostMapping("/edit")
-    public String updateItem(@RequestParam String title, Integer price, Long id,Authentication authentication){
+    public String updateItem(@RequestParam String title, Integer price, Long id,Authentication authentication, String picture) {
         if(title.length() < 100 && price > 0){
-           itemService.updateItem(title,price,id,authentication.getName());
+           itemService.updateItem(title,price,id,authentication.getName(),picture);
         }
         return "redirect:/list";
     }
@@ -98,7 +99,7 @@ public class ItemController {
     //페이지네이션
     @GetMapping("/list/page/{id}")
     String getListPage(@PathVariable Integer id, Model model){
-        Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1,5)); // 테이블에서 일부만 가져옴 ,몇번째 페이지 ,몇개
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(id - 1,5, Sort.by(Sort.Direction.ASC,"id"))); // 테이블에서 일부만 가져옴 ,몇번째 페이지 ,몇개, 정렬기준방법
         result.getTotalPages(); //총 몇페이지가 있는지 알려줌
         result.hasNext(); //다음 페이지가 있는지 알려줌
         //model.addAttribute("items", result);

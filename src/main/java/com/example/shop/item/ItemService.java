@@ -34,12 +34,13 @@ public class ItemService {
         var a = new Item();
         System.out.println(a.toString());
     }
-    public void updateItem(String title, Integer price,Long id, String writer){
+    public void updateItem(String title, Integer price,Long id, String writer,String filename){
         Item item = new Item();
         item.setId(id);
         item.setTitle(title);
         item.setPrice(price);
         item.setWriter(writer);
+        item.setImgUrl(filename);
         itemRepository.save(item);
     }
 }
