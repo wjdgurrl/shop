@@ -12,20 +12,26 @@
         <h4>상세페이지</h4>
 <!--        <a th:href="@{/edit/{id}(id=${items})}">-->
         <h1 th:text="${data.writer}">작성자</h1>
-        <a th:href="@{/edit/{id}(id=${data.id})}">수정</a>
+
         <!--<img src="https://placehold.co/300">-->
         <img th:src="${data.imgUrl}" alt="상품 이미지" style="max-width: 300px;">
         <h4 th:text="${data.title}">제목</h4>
         <h4 th:text="${data.price + '원'}">금액</h4>
 
-        <!--삭제 기능 구현 -->
-        <span th:onclick="fetch('/data?id=[[${data.id}]]',{method:'DELETE'})
+
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/edit/{id}(id=${data.id})}">수정</a>
+            <!--삭제 기능 구현 -->
+            <span th:onclick="fetch('/data?id=[[${data.id}]]',{method:'DELETE'})
             .then(r => r.text())
             .then((a) => {
             console.log(a)
                 location.reload();
             })
         ">삭제</span>
+        </span>
+
+
     </div>
 
     <script>

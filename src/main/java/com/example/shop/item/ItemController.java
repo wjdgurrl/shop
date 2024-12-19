@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +36,7 @@ public class ItemController {
         return "redirect:/list/page/1";
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
     String write(){
         return "write.html";
@@ -57,6 +58,7 @@ public class ItemController {
 
 
     //url파라미터
+    @PreAuthorize("isAuthenticated()")//로그인시에만
     @GetMapping("/detail/{id}")
     //(@PathVariable 타입 URL파라미터명) -> 유저가 입력한 내용을 가져옴
     String detail(@PathVariable Long id,Model model) throws Exception{
@@ -69,7 +71,7 @@ public class ItemController {
         }
     }
 
-
+    @PreAuthorize("isAuthenticated()")//로그인시에만
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model){
         Optional<Item> result =itemRepository.findById(id);

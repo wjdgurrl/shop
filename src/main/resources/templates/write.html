@@ -7,19 +7,23 @@
 </head>
 <body>
 <div th:replace="~{nav.html::navbar}"></div>
-<form action="/add" method="POST">
+
+<span sec:authorize="isAnonymous()">
+    <a href="/login">로그인하세요</a>
+</span>
+<span sec:authorize="isAuthenticated()">
+    <form action="/add" method="POST">
 
     <input name = "title">
     <input name = "price">
     <input type = "hidden" name = "picture" id="imgUrl">
     <button type ="submit">전송</button>
-</form>
-<!--유저가 파일을 선택하면 onchange가 실행되는것-->
-<!--id를 통해 자바스크립트 에서 url을 식별하기-->
-<input type="file" onchange="getURL(this)">
-<img src="" alt="미리보기 이미지" style="max-width: 300px;">
-
-
+    </form>
+    <!--유저가 파일을 선택하면 onchange가 실행되는것-->
+    <!--id를 통해 자바스크립트 에서 url을 식별하기-->
+    <input type="file" onchange="getURL(this)">
+    <img src="" alt="미리보기 이미지" style="max-width: 300px;">
+</span>
 
 <script>
     //await은 then을 대신해서 붙이는 코드

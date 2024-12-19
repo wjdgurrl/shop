@@ -22,7 +22,7 @@ public class MemberController {
 
     @GetMapping("/register")
     public String register(Authentication auth){
-        if(auth.isAuthenticated()){
+        if(auth!= null && auth.isAuthenticated()){
             return "redirect:/list";
         }
         return "register.html";
