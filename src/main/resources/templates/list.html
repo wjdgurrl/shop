@@ -9,6 +9,11 @@
 <body>
     <div th:replace="~{nav.html::navbar}"></div>
 
+    <form action="/search" method="POST" style="display: inline">
+        <input name="searchText">
+        <button>검색</button>
+    </form>
+
     <div class = "card" th:each=" i : ${items}"> <!-- 타임리프 반복 문법 -->
         <a th:href="@{/detail/{id}(id=${i.id})}">
         <img th:src="${i.imgUrl}" alt="상품 이미지" style="max-width: 100px; max-height: 100px">
@@ -52,7 +57,7 @@
             th:text="${page}"
             th:classappend="${page == currentPage} ? 'active' : ''"></a>
         </span>-->
-
+    </div>
 
 
 </body>

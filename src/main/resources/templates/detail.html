@@ -50,13 +50,13 @@
         <!--저장된 코멘트-->
         <div class="comment-list">
             <!--비어있으면 표시-->
-            <div th:if="${#lists.isEmpty(comment)}">
+            <div th:if="${#lists.isEmpty(commentPage.content)}">
                 <p>첫 댓글을 작성해주세요.</p>
             </div>
-            <div th:each="c:${comment}" class="comment-box">
+            <div th:each="c:${commentPage.content}" class="comment-box">
                 <h5 th:text="${c.username}">작성자</h5>
                 <h5 th:text="${c.content}">댓글</h5>
-                <h6 th:text="${#temporals.format(comment.createdAt,'yyyy-MM-dd HH:mm')}">작성시간</h6>
+                <h6 th:text="${#temporals.format(c.createdAt,'yyyy-MM-dd HH:mm')}">작성시간</h6>
             </div>
         </div>
         <!-- 페이지네이션 -->
@@ -67,10 +67,17 @@
                class="prev-button">이전</a>
 
             <!-- 페이지 번호 버튼 -->
-            <span th:each="page : ${#numbers.sequence(1, totalPages)}">
+            <span th:if="${totalPages > 0}" th:each="page : ${#numbers.sequence(1, totalPages)}">
             <a th:href="@{/detail/{id}(id=${data.id}, page=${page})}"
-            th:text="${page}"
-            th:classappend="${page == currentPage} ? 'active' : ''"></a>
+                th:text="${page}"
+                th:classappend="${page == currentPage} ? 'active' : ''"></a>
+            </span>
+
+            <!-- 댓글이 없어서 totalPages가 1인 경우 (1번 버튼만 표시) -->
+            <span th:if="${#lists.isEmpty(commentPage.content)}">
+            <a th:href="@{/detail/{id}(id=${data.id}, page=1)}"
+                th:text="'1'"
+                th:classappend="${currentPage == 1} ? 'active' : ''"></a>
             </span>
 
             <!-- 다음 버튼 -->

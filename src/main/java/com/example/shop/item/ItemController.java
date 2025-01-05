@@ -65,13 +65,17 @@ public class ItemController {
     @GetMapping("/detail/{id}")
     //(@PathVariable 타입 URL파라미터명) -> 유저가 입력한 내용을 가져옴
     //page는 현재 댓글페이지
-    String detail(@PathVariable Long id,Model model,@RequestParam(defaultValue = "0") int page) throws Exception{
-        Optional<Item> result = itemRepository.findById(id);
-        Page<Comment> comment= commentRepository.findAllByParentId(id,PageRequest.of(page,5, Sort.Direction.DESC,"createdAt"));
+    String detail(@PathVariable Long id,Model model,@RequestParam(defaultValue = "1") int page) throws Exception{
+        if(page < 1){
+            //page = 0; //페이지 값이 0보다 작으면 오류가 남으로 방지
+            return "redirect:/detail/" + id +"?page=1"; //잘못된 요청이면 그냥 1으로 리다이렉트
+        }
+        Optional<Item> result = itemRepository.findById(id); //게시글 조회
+        Page<Comment> comment= commentRepository.findAllByParentId(id,PageRequest.of(page - 1,5, Sort.Direction.DESC,"createdAt")); //댓글 조회 (페이지네이션)
         if (result.isPresent()) {
             model.addAttribute("data", result.get());
             model.addAttribute("commentPage", comment);//댓글 페이지 데이터
-            model.addAttribute("currentPage",page);//댓글 현재 페이지
+            model.addAttribute("currentPage",page);//댓글 현재 페이지 1페이지
             model.addAttribute("totalPages",comment.getTotalPages());
             return "detail.html";
         } else {
@@ -133,6 +137,15 @@ public class ItemController {
         var result = s3Service.createPresignedUrl("test/"+filename);
         System.out.println(result);
         return result;
+    }
+
+    @PostMapping("/search")
+    String postSearch(@RequestParam String searchText, Model model){
+        /*var result = itemRepository.fullTextSearch(searchText); //인덱스를 활용하지 않음
+        System.out.println(result);*/
+        List<Item> result = itemRepository.searchBySimilarity(searchText);
+        model.addAttribute("items", result);
+        return "searchList.html";
     }
 
 }

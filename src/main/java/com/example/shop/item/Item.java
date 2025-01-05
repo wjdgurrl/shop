@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString // 롬복  toString() 기능으로 인스턴스에 대한 정보를 문자열로 반환해주는거 주소 안나오고
 @Setter
 @Getter
+@Table(indexes = @Index(columnList = "title",name = "titleIndex"))
 public class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //유니크 번호 , generatedValue는 상품을 하나 추가할때마다 1씩 증가
     public Long id; //컬럼 생성
