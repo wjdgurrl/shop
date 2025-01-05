@@ -1,5 +1,7 @@
 package com.example.shop.item;
 
+import com.example.shop.comment.Comment;
+import com.example.shop.comment.CommentRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ public class ItemController {
     private final ItemRepository itemRepository;
     private final ItemService itemService;
     private final S3Service s3Service;
+    private final CommentRepository commentRepository;
 
     /*@Autowired
     public ItemController(ItemRepository itemRepository) {
@@ -61,10 +64,15 @@ public class ItemController {
     @PreAuthorize("isAuthenticated()")//로그인시에만
     @GetMapping("/detail/{id}")
     //(@PathVariable 타입 URL파라미터명) -> 유저가 입력한 내용을 가져옴
-    String detail(@PathVariable Long id,Model model) throws Exception{
+    //page는 현재 댓글페이지
+    String detail(@PathVariable Long id,Model model,@RequestParam(defaultValue = "0") int page) throws Exception{
         Optional<Item> result = itemRepository.findById(id);
+        Page<Comment> comment= commentRepository.findAllByParentId(id,PageRequest.of(page,5, Sort.Direction.DESC,"createdAt"));
         if (result.isPresent()) {
             model.addAttribute("data", result.get());
+            model.addAttribute("commentPage", comment);//댓글 페이지 데이터
+            model.addAttribute("currentPage",page);//댓글 현재 페이지
+            model.addAttribute("totalPages",comment.getTotalPages());
             return "detail.html";
         } else {
             return "redirect:/list";
@@ -126,6 +134,5 @@ public class ItemController {
         System.out.println(result);
         return result;
     }
-
 
 }

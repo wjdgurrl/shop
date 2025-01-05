@@ -14,13 +14,13 @@ public class ShopApplication {
         var ab = 20;*/
         //var는 컴퓨터가 유추하는 변수
 
-        identify id = new identify();
+        /*identify id = new identify();
 
         id.setName("홍길도ㅓㅇ");
         id.setAge(12);
         id.setingAge(102);
         id.ageAdd();
-        System.out.println(id.getAge());
+        System.out.println(id.getAge());*/
 
     }
 }

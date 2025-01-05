@@ -32,7 +32,56 @@
         </span>
 
 
+        <!--코멘트 작성 영역-->
+        <span sec:authorize="isAnonymous()">
+            <div class="comment-input">
+                <h2>로그인 하셔야 댓글을 작성할 수 있습니다.</h2>
+            </div>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <form action="/comment" method="POST">
+            <input name = "comment" class="comment-input" placeholder="댓글을 입력해주세요" required>
+            <input name = "parent" th:value="${data.id}" style="display:none">
+            <button type = "submit">전송</button>
+        </form>
+        </span>
+
+
+        <!--저장된 코멘트-->
+        <div class="comment-list">
+            <!--비어있으면 표시-->
+            <div th:if="${#lists.isEmpty(comment)}">
+                <p>첫 댓글을 작성해주세요.</p>
+            </div>
+            <div th:each="c:${comment}" class="comment-box">
+                <h5 th:text="${c.username}">작성자</h5>
+                <h5 th:text="${c.content}">댓글</h5>
+                <h6 th:text="${#temporals.format(comment.createdAt,'yyyy-MM-dd HH:mm')}">작성시간</h6>
+            </div>
+        </div>
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+            <!-- 이전 버튼 -->
+            <a th:if="${currentPage > 1}"
+               th:href="@{/detail/{id}(id=${data.id}, page=${currentPage - 1})}"
+               class="prev-button">이전</a>
+
+            <!-- 페이지 번호 버튼 -->
+            <span th:each="page : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{/detail/{id}(id=${data.id}, page=${page})}"
+            th:text="${page}"
+            th:classappend="${page == currentPage} ? 'active' : ''"></a>
+            </span>
+
+            <!-- 다음 버튼 -->
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{/detail/{id}(id=${data.id}, page=${currentPage + 1})}"
+               class="next-button">다음</a>
+        </div>
+
+
     </div>
+
 
     <script>
         <!--삭제기능 -->
