@@ -1,5 +1,8 @@
 package com.example.shop.member;
 
+
+import com.example.shop.sales.Sales;
+import com.example.shop.sales.SalesService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import com.example.shop.sales.SalesRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Controller
@@ -19,6 +24,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final SalesService salesService;
 
     @GetMapping("/register")
     public String register(Authentication auth){
@@ -53,7 +59,7 @@ public class MemberController {
         System.out.println(result.displayName);
         System.out.println(auth.getName());//아이디 출력
         System.out.println(auth.isAuthenticated());//로그인여부 검사가능
-        System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));//현재 유저 권한 메모해둔거
+        System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));//현재 유저 권한 메모해둔
         return "mypage.html";
     }
     @GetMapping("/user/1")
@@ -87,6 +93,12 @@ public class MemberController {
             this.username = username;
             this.displayName = displayName;
         }
+    }
+
+    @PostMapping("/bucket")
+    public String bucekt(@RequestParam String itemName, int price, Long memberId, LocalDateTime created, Authentication auth){
+        salesService.addCart(itemName,price,memberId);
+        return "mypage.html";
     }
 
 

@@ -25,7 +25,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>{
     List<Item> findAllByTitleContains(String title);
     //Slice<Item> findPageBy(Pageable page) // 슬라이스 방식, 전체 페이지 갯수를 알려주지 않아서 count 문법을 실행 안함 -> 성능적 우위
     //@Query(value = "SELECT * FROM shop.item WHERE MATCH(title) AGAINST(?1)",  nativeQuery = true)//jpa에서 full text index검색 구현, ?1 이부분이 파라미터문법 근데 postgresSQL은 안됨
-    List<Item> fullTextSearch(String title);
+    //List<Item> fullTextSearch(String title);
 
     // postgres방식
     // N-gram을 사용한 LIKE 검색

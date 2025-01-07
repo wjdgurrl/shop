@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -12,14 +12,18 @@
         <h4>상세페이지</h4>
 <!--        <a th:href="@{/edit/{id}(id=${items})}">-->
         <h1 th:text="${data.writer}">작성자</h1>
-
+        <h1 th:if="${userId != null}" th:text="${userId}">구매자 id</h1>
         <!--<img src="https://placehold.co/300">-->
         <img th:src="${data.imgUrl}" alt="상품 이미지" style="max-width: 300px;">
-        <h4 th:text="${data.title}">제목</h4>
-        <h4 th:text="${data.price + '원'}">금액</h4>
+        <h4 th:text="${data.title}" id="itemTitle">제목</h4>
+        <h4 th:text="${data.price + '원'}" id="itemPrice">금액</h4>
 
+        <!--장바구니 추가 버튼-->
+        <!-- itemName, price, memberId-->
+        <button onclick="addToCart()">장바구니 추가</button>
 
         <span sec:authorize="isAuthenticated()">
+            <div>
             <a th:href="@{/edit/{id}(id=${data.id})}">수정</a>
             <!--삭제 기능 구현 -->
             <span th:onclick="fetch('/data?id=[[${data.id}]]',{method:'DELETE'})
@@ -29,7 +33,7 @@
                 location.reload();
             })
         ">삭제</span>
-        </span>
+        </div>
 
 
         <!--코멘트 작성 영역-->
@@ -93,6 +97,39 @@
     <script>
         <!--삭제기능 -->
         //이 url로 get요청 날려줌
+
+        <!--장바구니 추가 기능-->
+        async function addToCart(){
+            //1. 상품 정보를 가져오기
+            const itemName = document.getElementById('itemTitle').innerText //id = itemName인 html요소를 가져와서 제목 항목을 가져옴
+            const itemPrice = document.getElementById('itemPrice').innerText
+
+            //2. 보낼 데이터를 json으로 구성하기
+            const data = {
+                itemName: itemName,
+                price: itemPrice,
+                memberId: memberId,
+            };
+
+            try{
+                const response = await fetch('/bucket',{
+                    method:'POST', //post요청
+                    headers:{
+                        'Content-Type':'application/json', // 보내는 데이터 형식
+                    },
+                    body : JSON.stringify(data) //데이터를  JSON문자열로 변환해 전송
+                });
+                //응답처리
+                if (response.ok){
+                    const result = await response.json(); // 서버 응답을 json으로 변환
+                    alert(result.message); // 성공 메시지 표시
+                }else{
+                    alert('장바구니 추가 실패!');
+                }
+            }catch (error){
+                console.error('장바구니 추가 중 오류:',error);
+            }
+        }
 
     </script>
 
