@@ -1,8 +1,11 @@
 package com.example.shop.sales;
 
 
+import com.example.shop.member.CustomUser;
+import com.example.shop.member.Member;
 import com.example.shop.sales.SalesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,5 +24,6 @@ public class SalesService {
         sales.setCreated(LocalDateTime.now());
         salesRepository.save(sales);
     }
+
 
 }

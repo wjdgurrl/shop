@@ -99,7 +99,7 @@
             //1. 상품 정보를 가져오기
             const memberId = document.getElementById("userId").innerHTML;
             const itemName = document.getElementById('itemTitle').innerText; //id = itemName인 html요소를 가져와서 제목 항목을 가져옴
-            const itemPrice = document.getElementById('itemPrice').innerText;
+            const itemPrice = document.getElementById('itemPrice').innerText; //이때는 그냥 innerText로 가져왔지만 String타입이 아니면 value로 실제 값을 가져오자 안그럼 또 오류난다
 
             //2. 보낼 데이터를 json으로 구성하기
             const data = {
@@ -122,6 +122,7 @@
                 if (response.ok){
                     const result = await response.json(); // 서버 응답을 json으로 변환
                     alert(result.message); // 성공 메시지 표시
+                    window.location.href = result.redirectUrl; //서버 응답 받아서 리다이렉트 링크로 이동
                 }else{
                     alert('장바구니 추가 실패!');
                 }

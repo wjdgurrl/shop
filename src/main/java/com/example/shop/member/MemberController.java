@@ -13,14 +13,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.shop.sales.SalesRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -30,6 +33,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final SalesService salesService;
+    private final SalesRepository salesRepository;
 
     @GetMapping("/register")
     public String register(Authentication auth) {
@@ -57,7 +61,7 @@ public class MemberController {
 //    @PreAuthorize("hasAuthority()") 특정 권한 취득시
 
     @GetMapping("/my-page")
-    public String myPage(Authentication auth) {
+    public String myPage(Authentication auth, Model model) {
 
         //로그인한 유저의 정보 출력 가능, authentication auth에 담겨있음
         System.out.println(auth);
@@ -66,6 +70,9 @@ public class MemberController {
         System.out.println(auth.getName());//아이디 출력
         System.out.println(auth.isAuthenticated());//로그인여부 검사가능
         System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));//현재 유저 권한 메모해둔
+        List<Sales> sales = salesRepository.findByMemberId(result.id);
+        System.out.println(sales);
+        model.addAttribute("sales", sales);
         return "mypage.html";
     }
 
@@ -107,12 +114,15 @@ public class MemberController {
     public ResponseEntity<Map<String, String>> bucket(@RequestBody Map<String, String> data) {
         String itemName = data.get("itemName");
         int itemPrice = Integer.parseInt(data.get("itemPrice").replaceAll("[^0-9]", "")); //숫자 뒤에 "원"표시 제거
-        Long memberId = Long.parseLong(data.get("memberId"));
+        Long memberId = Long.parseLong(data.get("memberId")); //ajax로 전송받았지만 사실 변조 위험성때문에 MyUserDetails를 수정해서 auth를 통해 가져오는게 좋음
         System.out.println(itemName +" "+itemPrice +" "+memberId);
         salesService.addCart(itemName,itemPrice,memberId);
+
         //ajax요청이라 json을 반환해줘야 함
         Map<String, String> response = new HashMap<>();
         response.put("message", "장바구니에 추가되었습니다.");
+        //리다이렉트 하게 반환값에 html담아서 전송
+        response.put("redirectUrl","/my-page");
         return ResponseEntity.ok(response);
         //return "mypage.html";
     }

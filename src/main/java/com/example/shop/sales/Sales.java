@@ -1,18 +1,19 @@
 package com.example.shop.sales;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.shop.member.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.HQLSelect;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class Sales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,14 @@ public class Sales {
 
     private String itemName;
     private Integer price;
+
+    //현재는 멤버 객체를 변수로 안받아서 아래 기능을 못씀
+   /* @ManyToOne
+    @JoinColumn
+            (name = "member_id",
+                    foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)//Foreign key 제약사항을 자동으로 걸지 말라는 뜻
+            )
+    private Member member;//member테이블 가리켜야 함*/
     private Long memberId;
 
     @CreationTimestamp

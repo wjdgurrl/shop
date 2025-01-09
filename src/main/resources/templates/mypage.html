@@ -19,6 +19,28 @@
 <!--로그인시에만 출력-->
 <span sec:authorize="isAuthenticated">
     로그인 했씁니다.
+
+    <h1>나의 주문 내역</h1>
+    <!-- 주문 내역 출력 -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>구매일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 주문 내역 반복 출력 -->
+            <tr th:each="sale : ${sales}">
+                <td th:text="${sale.itemName}">상품명</td>
+                <td th:text="${sale.price}">가격</td>
+                <td th:text="${#temporals.format(sale.created, 'yyyy-MM-dd HH:mm')}">구매일</td>
+            </tr>
+        </tbody>
+    </table>
+
+
 </span>
 <!--로그아웃시에만 출력 -->
 <span sec:authorize="isAnonymous()">

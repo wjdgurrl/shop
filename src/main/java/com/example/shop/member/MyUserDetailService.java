@@ -30,6 +30,7 @@ public class MyUserDetailService implements UserDetailsService {
         authorityList.add(new SimpleGrantedAuthority("normal"));
         var a = new CustomUser(user.getUsername(), user.getPassword(), authorityList);
         a.displayName = user.getDisplayName();
+        a.id = user.getId();
         return a;
     }
 }
