@@ -6,6 +6,10 @@ import com.example.shop.sales.SalesService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import lombok.Setter;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +21,7 @@ import com.example.shop.sales.SalesRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,22 +32,23 @@ public class MemberController {
     private final SalesService salesService;
 
     @GetMapping("/register")
-    public String register(Authentication auth){
-        if(auth!= null && auth.isAuthenticated()){
+    public String register(Authentication auth) {
+        if (auth != null && auth.isAuthenticated()) {
             return "redirect:/list";
         }
         return "register.html";
     }
 
     @PostMapping("/member")
-    public String addMember(@RequestParam String username, String password,String displayName) throws Exception {
+    public String addMember(@RequestParam String username, String password, String displayName) throws Exception {
         memberService.addMember(username, password, displayName);
         return "redirect:/list";
     }
+
     //로그아웃시에만
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login.html";
     }
     //api마다 검사하기 귀찮을시에는 어노테이션으로 검사가능
@@ -51,7 +57,7 @@ public class MemberController {
 //    @PreAuthorize("hasAuthority()") 특정 권한 취득시
 
     @GetMapping("/my-page")
-    public String myPage(Authentication auth){
+    public String myPage(Authentication auth) {
 
         //로그인한 유저의 정보 출력 가능, authentication auth에 담겨있음
         System.out.println(auth);
@@ -62,9 +68,10 @@ public class MemberController {
         System.out.println(auth.getAuthorities().contains(new SimpleGrantedAuthority("일반유저")));//현재 유저 권한 메모해둔
         return "mypage.html";
     }
+
     @GetMapping("/user/1")
     @ResponseBody
-    public MemberDto getUser(){
+    public MemberDto getUser() {
         var a = memberRepository.findById(1L);
         var result = a.get();
         //이렇게 하면 유저 정보가 전부 전송되버림
@@ -82,24 +89,31 @@ public class MemberController {
 
         return data; // object를 여기에 넣으면 json으로 자동변환
     }
+
     //DTO 클래스
     //웬만하면 따로 파일로 생성하는게 좋음
     @Getter // 이거나 클래스 내부에 public이 있어야 자동으로 json변환해줌
-    class MemberDto{
+    class MemberDto {
         public String username; //public 있어야 json변환해줌
         public String displayName;
 
-        MemberDto(String username, String displayName){
+        MemberDto(String username, String displayName) {
             this.username = username;
             this.displayName = displayName;
         }
     }
 
     @PostMapping("/bucket")
-    public String bucekt(@RequestParam String itemName, int price, Long memberId, LocalDateTime created, Authentication auth){
-        salesService.addCart(itemName,price,memberId);
-        return "mypage.html";
+    public ResponseEntity<Map<String, String>> bucket(@RequestBody Map<String, String> data) {
+        String itemName = data.get("itemName");
+        int itemPrice = Integer.parseInt(data.get("itemPrice").replaceAll("[^0-9]", "")); //숫자 뒤에 "원"표시 제거
+        Long memberId = Long.parseLong(data.get("memberId"));
+        System.out.println(itemName +" "+itemPrice +" "+memberId);
+        salesService.addCart(itemName,itemPrice,memberId);
+        //ajax요청이라 json을 반환해줘야 함
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "장바구니에 추가되었습니다.");
+        return ResponseEntity.ok(response);
+        //return "mypage.html";
     }
-
-
 }

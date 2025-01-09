@@ -75,16 +75,23 @@ public class ItemController {
             return "redirect:/detail/" + id +"?page=1"; //잘못된 요청이면 그냥 1으로 리다이렉트
         }
         Optional<Item> result = itemRepository.findById(id); //게시글 조회
-        Optional<Member> member = memberRepository.findByUsername(auth.getName());
         Page<Comment> comment= commentRepository.findAllByParentId(id,PageRequest.of(page - 1,5, Sort.Direction.DESC,"createdAt")); //댓글 조회 (페이지네이션)
+
+        Long userId = null;
+        //로그인 했으면 로그인 id값 전달용
+        if(auth != null && auth.isAuthenticated()){
+            Optional<Member> member = memberRepository.findByUsername(auth.getName());
+            if(member.isPresent()){
+                userId = member.get().getId();
+            }
+        }
+
         if (result.isPresent()) {
             model.addAttribute("data", result.get());
             model.addAttribute("commentPage", comment);//댓글 페이지 데이터
             model.addAttribute("currentPage",page);//댓글 현재 페이지 1페이지
             model.addAttribute("totalPages",comment.getTotalPages());
-            if(auth!= null && member.isPresent()){
-                model.addAttribute("userId",member.get().getId());
-            }
+            model.addAttribute("userId",userId);
             return "detail.html";
         } else {
             return "redirect:/list";

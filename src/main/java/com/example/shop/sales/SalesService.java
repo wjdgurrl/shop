@@ -13,10 +13,10 @@ public class SalesService {
 
     private final SalesRepository salesRepository;
 
-    public void addCart(String itemName, int price, Long memberId){
+    public void addCart(String itemName, int itemPrice, Long memberId){
         Sales sales = new Sales();
         sales.setItemName(itemName);
-        sales.setPrice(price);
+        sales.setPrice(itemPrice);
         sales.setMemberId(memberId);
         sales.setCreated(LocalDateTime.now());
         salesRepository.save(sales);
